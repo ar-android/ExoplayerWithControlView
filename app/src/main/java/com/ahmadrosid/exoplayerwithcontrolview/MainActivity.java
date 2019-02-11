@@ -16,6 +16,8 @@ import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
@@ -62,10 +64,18 @@ public class MainActivity extends AppCompatActivity {
         DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(this,
                 Util.getUserAgent(this, "Exo2"), defaultBandwidthMeter);
 
-        String hls_url = "https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8";
-        Uri uri = Uri.parse(hls_url);
-        Handler mainHandler = new Handler();
-        MediaSource mediaSource = new HlsMediaSource(uri, dataSourceFactory, mainHandler, null);
+        String url = "https://www.dropbox.com/s/vuqveg2i4o1bwme/slank_cover_mars_slanker.mp4?dl=1";
+
+//        For hls
+//        Uri uri = Uri.parse(url);
+//        Handler mainHandler = new Handler();
+//        MediaSource mediaSource = new HlsMediaSource(uri, dataSourceFactory, mainHandler, null);
+
+        String userAgent = Util.getUserAgent(this, "ExoPlayer");
+        MediaSource mediaSource = new ExtractorMediaSource(Uri.parse(url),
+                new DefaultDataSourceFactory(this, userAgent),
+                new DefaultExtractorsFactory(), null, null);
+
         player.prepare(mediaSource);
         player.setPlayWhenReady(playWhenReady);
         player.addListener(new Player.EventListener() {
